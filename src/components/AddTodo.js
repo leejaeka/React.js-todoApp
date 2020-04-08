@@ -1,4 +1,5 @@
 //rce
+import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 export class AddTodo extends Component {
     state = {
@@ -36,5 +37,9 @@ const headerStyle = {
     color: '#fff',
     textAlign: 'center',
     padding: '10px'
+}
+//PropTypes
+AddTodo.propTypes = {
+    addTodos: PropTypes.func.isRequired,
 }
 export default AddTodo;

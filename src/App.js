@@ -6,27 +6,18 @@ import { render } from '@testing-library/react';
 import Header from './components/layout/header';
 import About from './components/pages/About';
 import AddTodo from './components/AddTodo';
-import { v4 as uuidv4 } from 'uuid';
+//import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
 
 class App extends Component {
     state = {
-        todos: [
-            {
-                id: uuidv4(),
-                title: 'Study STA248',
-                completed: false
-            },
-            {
-                id: uuidv4(),
-                title: 'Study React.js',
-                completed: false
-            },
-            {
-                id: uuidv4(),
-                title: 'Eat Dinner',
-                completed: false
-            }
-        ]
+        todos: []
+    }
+    componentDidMount() {
+        // '?_limit=10' would just get 10
+        axios.get('https://jsonplaceholder.typicode.com/todos?_limit=10')
+            .then(res => this.setState({ todos: res.data }))
+            //itll be res.data
     }
     //TOGGLES COMPLETED
     markComplete = (id) => {
@@ -40,20 +31,19 @@ class App extends Component {
     }
 
     delTodo = (id) => {
-        this.setState({
+        axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`).then(res=>this.setState({
             // spread operator '...'
             todos: [...this.state.todos.filter(todo => todo.id!=id)]
         }
-        )
+        ))
+        
     }
 
     addTodo = (title) => {
-        const newTodo = {
-            id: uuidv4(),
-            title: title,
+        axios.post('https://jsonplaceholder.typicode.com/todos', {
+            title,
             completed: false
-        }
-        this.setState({todos:[...this.state.todos, newTodo]})
+        }).then(res => this.setState({ todos: [...this.state.todos, res.data] }))
 
     }
 
